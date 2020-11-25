@@ -1,0 +1,312 @@
+Enter password: ********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 68
+Server version: 8.0.21 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2020, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database onlinefoodordering;
+Query OK, 1 row affected (0.31 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| bank               |
+| information_schema |
+| mysql              |
+| onlinefoodordering |
+| performance_schema |
+| sakila             |
+| sample1            |
+| sys                |
+| world              |
++--------------------+
+9 rows in set (0.09 sec)
+
+mysql> use onlinefoodordering;
+Database changed
+mysql> create table RMenuItems(MenuId int primary key AUTO_INCREMENT,MenuName varchar(20),MenuCategory varchar(20),MenuPrice float,MenuDesc varchar(20),RestaurantId int, foreign key(RestaurantId) references Restaurant(RestaurantId));
+ERROR 1824 (HY000): Failed to open the referenced table 'restaurant'
+mysql> create table Restaurant(RestaurantId int primary key AUTO_INCREMENT,RestaurantName varchar(20),RestaurantAddress varchar(20),RestaurantCity varchar(20),ContactNo int);
+Query OK, 0 rows affected (1.15 sec)
+
+mysql> Query OK, 0 rows affected (2.23 sec
+    -> ^C
+mysql>  create table RMenuItems(MenuId int primary key AUTO_INCREMENT,MenuName varchar(20),MenuCategory varchar(20),MenuPrice float,MenuDesc varchar(20),RestaurantId int, foreign key(RestaurantId) references Restaurant(RestaurantId));
+Query OK, 0 rows affected (0.39 sec)
+
+mysql> create table Customers(cusId int primary key AUTO_INCREMENT,cusName varchar(20),custcity varchar(20),cusDOB date,cusgender varchar(20) default 'male',custpwd varchar(10));
+Query OK, 0 rows affected (0.48 sec)
+
+mysql> create table Orders(OrderId int primary key AUTO_INCREMENT,cusId int,orderDate date,deliveryAdd varchar(30),orderstatus varchar(20),foreign key(cusId) references Customers(cusId));
+Query OK, 0 rows affected (0.77 sec)
+
+mysql> create table OrderMenus(OrderId int,MenuId int,MenuQty int, MenuPrice float,foreign key(OrderId) references Orders(OrderId),foreign key(MenuId) references RMenuItems(MenuId));
+Query OK, 0 rows affected (0.28 sec)
+
+mysql> desc Restaurant;
++-------------------+-------------+------+-----+---------+----------------+
+| Field             | Type        | Null | Key | Default | Extra          |
++-------------------+-------------+------+-----+---------+----------------+
+| RestaurantId      | int         | NO   | PRI | NULL    | auto_increment |
+| RestaurantName    | varchar(20) | YES  |     | NULL    |                |
+| RestaurantAddress | varchar(20) | YES  |     | NULL    |                |
+| RestaurantCity    | varchar(20) | YES  |     | NULL    |                |
+| ContactNo         | int         | YES  |     | NULL    |                |
++-------------------+-------------+------+-----+---------+----------------+
+5 rows in set (0.09 sec)
+
+mysql> desc RMenuItems;
++--------------+-------------+------+-----+---------+----------------+
+| Field        | Type        | Null | Key | Default | Extra          |
++--------------+-------------+------+-----+---------+----------------+
+| MenuId       | int         | NO   | PRI | NULL    | auto_increment |
+| MenuName     | varchar(20) | YES  |     | NULL    |                |
+| MenuCategory | varchar(20) | YES  |     | NULL    |                |
+| MenuPrice    | float       | YES  |     | NULL    |                |
+| MenuDesc     | varchar(20) | YES  |     | NULL    |                |
+| RestaurantId | int         | YES  | MUL | NULL    |                |
++--------------+-------------+------+-----+---------+----------------+
+6 rows in set (0.00 sec)
+
+mysql> desc customers;
++-----------+-------------+------+-----+---------+----------------+
+| Field     | Type        | Null | Key | Default | Extra          |
++-----------+-------------+------+-----+---------+----------------+
+| cusId     | int         | NO   | PRI | NULL    | auto_increment |
+| cusName   | varchar(20) | YES  |     | NULL    |                |
+| custcity  | varchar(20) | YES  |     | NULL    |                |
+| cusDOB    | date        | YES  |     | NULL    |                |
+| cusgender | varchar(20) | YES  |     | male    |                |
+| custpwd   | varchar(10) | YES  |     | NULL    |                |
++-----------+-------------+------+-----+---------+----------------+
+6 rows in set (0.01 sec)
+
+mysql> desc orders;
++-------------+-------------+------+-----+---------+----------------+
+| Field       | Type        | Null | Key | Default | Extra          |
++-------------+-------------+------+-----+---------+----------------+
+| OrderId     | int         | NO   | PRI | NULL    | auto_increment |
+| cusId       | int         | YES  | MUL | NULL    |                |
+| orderDate   | date        | YES  |     | NULL    |                |
+| deliveryAdd | varchar(30) | YES  |     | NULL    |                |
+| orderstatus | varchar(20) | YES  |     | NULL    |                |
++-------------+-------------+------+-----+---------+----------------+
+5 rows in set (0.04 sec)
+
+mysql> desc ordermenus;
++-----------+-------+------+-----+---------+-------+
+| Field     | Type  | Null | Key | Default | Extra |
++-----------+-------+------+-----+---------+-------+
+| OrderId   | int   | YES  | MUL | NULL    |       |
+| MenuId    | int   | YES  | MUL | NULL    |       |
+| MenuQty   | int   | YES  |     | NULL    |       |
+| MenuPrice | float | YES  |     | NULL    |       |
++-----------+-------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> insert into restaurant values(11,'lakshmi bhavan','madurai east','madurai',489589);
+Query OK, 1 row affected (0.15 sec)
+
+mysql> insert into restaurant values(12,'bharati bhavan','madurai centre','madurai',56979);
+Query OK, 1 row affected (0.09 sec)
+
+mysql> insert into restaurant values(31,'hotel grand','madurai north','madurai',897455);
+Query OK, 1 row affected (0.09 sec)
+
+mysql> insert into restaurant values(14,'germanus','madurai west','madurai',78845);
+Query OK, 1 row affected (0.09 sec)
+
+mysql> select * from restaurant;
++--------------+----------------+-------------------+----------------+-----------+
+| RestaurantId | RestaurantName | RestaurantAddress | RestaurantCity | ContactNo |
++--------------+----------------+-------------------+----------------+-----------+
+|           11 | lakshmi bhavan | madurai east      | madurai        |    489589 |
+|           12 | bharati bhavan | madurai centre    | madurai        |     56979 |
+|           14 | germanus       | madurai west      | madurai        |     78845 |
+|           31 | hotel grand    | madurai north     | madurai        |    897455 |
++--------------+----------------+-------------------+----------------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> insert into RMenuItems(MenuName,MenuCategory,MenuPrice,MenuDesc,RestaurantId)values('noodles','chinese',80,'chinese item',11);
+Query OK, 1 row affected (0.20 sec)
+
+mysql> insert into RMenuItems(MenuName,MenuCategory,MenuPrice,MenuDesc,RestaurantId)values('boori','starter',40,'tiffin item',12);
+Query OK, 1 row affected (0.11 sec)
+
+mysql> insert into RMenuItems(MenuName,MenuCategory,MenuPrice,MenuDesc,RestaurantId)values('meals','lunch',90,'lunch item',14);
+Query OK, 1 row affected (0.06 sec)
+
+mysql> insert into RMenuItems(MenuName,MenuCategory,MenuPrice,MenuDesc,RestaurantId)values('burger','english',40,'foreign item',31);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> select * from rmenuitems;
++--------+----------+--------------+-----------+--------------+--------------+
+| MenuId | MenuName | MenuCategory | MenuPrice | MenuDesc     | RestaurantId |
++--------+----------+--------------+-----------+--------------+--------------+
+|      1 | noodles  | chinese      |        80 | chinese item |           11 |
+|      2 | boori    | starter      |        40 | tiffin item  |           12 |
+|      3 | meals    | lunch        |        90 | lunch item   |           14 |
+|      4 | burger   | english      |        40 | foreign item |           31 |
++--------+----------+--------------+-----------+--------------+--------------+
+4 rows in set (0.00 sec)
+
+mysql> insert into Customers(cusName,custcity,cusDOB,cusgender,custpwd) values('abd','chennai','1980-09-28','male','abd45');
+Query OK, 1 row affected (0.09 sec)
+
+mysql> insert into Customers(cusName,custcity,cusDOB,cusgender,custpwd) values('bala','madurai','1999-04-8','male','bala48');
+Query OK, 1 row affected (0.10 sec)
+
+mysql> insert into Customers(cusName,custcity,cusDOB,cusgender,custpwd) values('chandru','trichy','1980-08-18','male','chand2');
+Query OK, 1 row affected (0.06 sec)
+
+mysql> insert into Customers(cusName,custcity,cusDOB,cusgender,custpwd) values('dani','goa','1999-07-5','male','dani77');
+Query OK, 1 row affected (0.09 sec)
+
+mysql> select * from customers;
++-------+---------+----------+------------+-----------+---------+
+| cusId | cusName | custcity | cusDOB     | cusgender | custpwd |
++-------+---------+----------+------------+-----------+---------+
+|     1 | abd     | chennai  | 1980-09-28 | male      | abd45   |
+|     2 | bala    | madurai  | 1999-04-08 | male      | bala48  |
+|     3 | chandru | trichy   | 1980-08-18 | male      | chand2  |
+|     4 | dani    | goa      | 1999-07-05 | male      | dani77  |
++-------+---------+----------+------------+-----------+---------+
+4 rows in set (0.00 sec)
+
+mysql> insert into Orders(cusId,orderDate,deliveryadd,orderstatus)values(1,'2020-11-09','madurai','deliver');
+Query OK, 1 row affected (0.14 sec)
+
+mysql> insert into Orders(cusId,orderDate,deliveryadd,orderstatus)values(2,'2020-11-29','south stret','on delivery');
+Query OK, 1 row affected (0.11 sec)
+
+mysql> insert into Orders(cusId,orderDate,deliveryadd,orderstatus)values(3,'2020-11-19','kk nagar','deliver');
+Query OK, 1 row affected (0.07 sec)
+
+mysql> insert into Orders(cusId,orderDate,deliveryadd,orderstatus)values(4,'2020-11-23','jj nagar','on delivery');
+Query OK, 1 row affected (0.07 sec)
+
+mysql> insert into OrderMenus values(1,1,2,80);
+Query OK, 1 row affected (0.09 sec)
+
+mysql> insert into OrderMenus values(1,2,3,80);
+Query OK, 1 row affected (0.08 sec)
+
+mysql> insert into OrderMenus values(1,1,2,90);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into OrderMenus values(1,1,1,90);
+Query OK, 1 row affected (0.08 sec)
+
+mysql> select * from orders;
++---------+-------+------------+-------------+-------------+
+| OrderId | cusId | orderDate  | deliveryAdd | orderstatus |
++---------+-------+------------+-------------+-------------+
+|       1 |     1 | 2020-11-09 | madurai     | deliver     |
+|       2 |     2 | 2020-11-29 | south stret | on delivery |
+|       3 |     3 | 2020-11-19 | kk nagar    | deliver     |
+|       4 |     4 | 2020-11-23 | jj nagar    | on delivery |
++---------+-------+------------+-------------+-------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from ordermenus;
++---------+--------+---------+-----------+
+| OrderId | MenuId | MenuQty | MenuPrice |
++---------+--------+---------+-----------+
+|       1 |      1 |       2 |        80 |
+|       1 |      2 |       3 |        80 |
+|       1 |      1 |       2 |        90 |
+|       1 |      1 |       1 |        90 |
++---------+--------+---------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> select restaurantName,MenuId,MenuName,MenuPrice from Restaurant cross join RMenUItems;
++----------------+--------+----------+-----------+
+| restaurantName | MenuId | MenuName | MenuPrice |
++----------------+--------+----------+-----------+
+| lakshmi bhavan |      1 | noodles  |        80 |
+| bharati bhavan |      1 | noodles  |        80 |
+| germanus       |      1 | noodles  |        80 |
+| hotel grand    |      1 | noodles  |        80 |
+| lakshmi bhavan |      2 | boori    |        40 |
+| bharati bhavan |      2 | boori    |        40 |
+| germanus       |      2 | boori    |        40 |
+| hotel grand    |      2 | boori    |        40 |
+| lakshmi bhavan |      3 | meals    |        90 |
+| bharati bhavan |      3 | meals    |        90 |
+| germanus       |      3 | meals    |        90 |
+| hotel grand    |      3 | meals    |        90 |
+| lakshmi bhavan |      4 | burger   |        40 |
+| bharati bhavan |      4 | burger   |        40 |
+| germanus       |      4 | burger   |        40 |
+| hotel grand    |      4 | burger   |        40 |
++----------------+--------+----------+-----------+
+16 rows in set (0.02 sec)
+
+mysql> select restaurantName,MenuId,MenuName,MenuPrice from Restaurant,RMenuItems where RestaurantCity='madurai';
++----------------+--------+----------+-----------+
+| restaurantName | MenuId | MenuName | MenuPrice |
++----------------+--------+----------+-----------+
+| lakshmi bhavan |      1 | noodles  |        80 |
+| bharati bhavan |      1 | noodles  |        80 |
+| germanus       |      1 | noodles  |        80 |
+| hotel grand    |      1 | noodles  |        80 |
+| lakshmi bhavan |      2 | boori    |        40 |
+| bharati bhavan |      2 | boori    |        40 |
+| germanus       |      2 | boori    |        40 |
+| hotel grand    |      2 | boori    |        40 |
+| lakshmi bhavan |      3 | meals    |        90 |
+| bharati bhavan |      3 | meals    |        90 |
+| germanus       |      3 | meals    |        90 |
+| hotel grand    |      3 | meals    |        90 |
+| lakshmi bhavan |      4 | burger   |        40 |
+| bharati bhavan |      4 | burger   |        40 |
+| germanus       |      4 | burger   |        40 |
+| hotel grand    |      4 | burger   |        40 |
++----------------+--------+----------+-----------+
+16 rows in set (0.00 sec)
+
+mysql> select * from Orders inner join Ordermenus on Orders.OrderId=OrderMenus.OrderId where Orders.cusId=3;
+Empty set (0.01 sec)
+
+mysql> select * from Orders inner join Ordermenus on Orders.OrderId=OrderMenus.OrderId where Orders.cusId=2;
+Empty set (0.00 sec)
+
+mysql> select * from Orders inner join Ordermenus on Orders.OrderId=OrderMenus.OrderId where Orders.cusId=1;
++---------+-------+------------+-------------+-------------+---------+--------+---------+-----------+
+| OrderId | cusId | orderDate  | deliveryAdd | orderstatus | OrderId | MenuId | MenuQty | MenuPrice |
++---------+-------+------------+-------------+-------------+---------+--------+---------+-----------+
+|       1 |     1 | 2020-11-09 | madurai     | deliver     |       1 |      1 |       2 |        80 |
+|       1 |     1 | 2020-11-09 | madurai     | deliver     |       1 |      2 |       3 |        80 |
+|       1 |     1 | 2020-11-09 | madurai     | deliver     |       1 |      1 |       2 |        90 |
+|       1 |     1 | 2020-11-09 | madurai     | deliver     |       1 |      1 |       1 |        90 |
++---------+-------+------------+-------------+-------------+---------+--------+---------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> elect * from restaurant where restaurant.restaurantId not in(select restaurantId from rmenuitems where menuid in(select menuid from ordermenus));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'elect * from restaurant where restaurant.restaurantId not in(select restaurantId' at line 1
+mysql> select * from restaurant where restaurant.restaurantId not in(select restaurantId from rmenuitems where menuid in(select menuid from ordermenus));
++--------------+----------------+-------------------+----------------+-----------+
+| RestaurantId | RestaurantName | RestaurantAddress | RestaurantCity | ContactNo |
++--------------+----------------+-------------------+----------------+-----------+
+|           14 | germanus       | madurai west      | madurai        |     78845 |
+|           31 | hotel grand    | madurai north     | madurai        |    897455 |
++--------------+----------------+-------------------+----------------+-----------+
+2 rows in set (0.04 sec)
+
+mysql> select * from customers inner join Orders on customers.cusid=orders.cusid where customers.cusId=3;
++-------+---------+----------+------------+-----------+---------+---------+-------+------------+-------------+-------------+
+| cusId | cusName | custcity | cusDOB     | cusgender | custpwd | OrderId | cusId | orderDate  | deliveryAdd | orderstatus |
++-------+---------+----------+------------+-----------+---------+---------+-------+------------+-------------+-------------+
+|     3 | chandru | trichy   | 1980-08-18 | male      | chand2  |       3 |     3 | 2020-11-19 | kk nagar    | deliver     |
++-------+---------+----------+------------+-----------+---------+---------+-------+------------+-------------+-------------+
+1 row in set (0.04 sec)
+
+mysql>

@@ -1,0 +1,196 @@
+Enter password: ********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 72
+Server version: 8.0.21 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2020, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| bank               |
+| information_schema |
+| mysql              |
+| onlinefoodordering |
+| performance_schema |
+| sakila             |
+| sample1            |
+| sys                |
+| world              |
++--------------------+
+9 rows in set (0.05 sec)
+
+mysql> use bank;
+Database changed
+mysql> show tables;
++-----------------+
+| Tables_in_bank  |
++-----------------+
+| accountinfo     |
+| customersinfo   |
+| transactioninfo |
++-----------------+
+3 rows in set (0.04 sec)
+
+mysql> select * from accountinfo;
++-----------+------------+-------------+----------------+-----------------+---------------+
+| accountid | customerid | accounttype | accountbalance | accountopendate | accountstatus |
++-----------+------------+-------------+----------------+-----------------+---------------+
+|       502 |          5 | savings     |         150000 | 2020-11-07      | closed        |
+|       505 |          6 | savings     |         550000 | 2020-11-08      | open          |
+|       512 |          1 | savings     |          56000 | 2020-11-05      | open          |
+|       516 |          2 | savings     |          56580 | 2020-11-06      | open          |
+|       517 |          3 | current     |          85805 | 2020-11-05      | open          |
+|       518 |          4 | savings     |         158950 | 2020-11-06      | open          |
+|       528 |          9 | savings     |         380000 | 2020-11-06      | open          |
+|       558 |          7 | savings     |          50000 | 2020-11-07      | blocked       |
+|       568 |         10 | savings     |         355680 | 2020-11-07      | open          |
+|       588 |          8 | savings     |         350000 | 2020-11-08      | open          |
++-----------+------------+-------------+----------------+-----------------+---------------+
+10 rows in set (0.09 sec)
+
+mysql> select * from customersinfo;
++------------+------+--------------+-----------------+---------------+------------------+--------+
+| customerid | name | customercity | customeraddress | customermobno | customerpassword | pan    |
++------------+------+--------------+-----------------+---------------+------------------+--------+
+|          1 | ak   | city a       | 1 nagar         |         87954 | abc              |  56987 |
+|          2 | bk   | city b       | 2 nagar         |         45912 | qwrer            |  58984 |
+|          3 | ck   | city c       | 3 nagar         |         78256 | gty              | 879456 |
+|          4 | dk   | city d       | 4 nagar         |         12389 | ghry             | 589845 |
+|          5 | ek   | city e       | 5 nagar         |        458963 | tytf             |  89745 |
+|          6 | fk   | city f       | 6 nagar         |        145895 | gjhfxc           | 898456 |
+|          7 | gk   | city g       | 7 nagar         |        879846 | ahjx             |  56845 |
+|          8 | hk   | city h       | 8 nagar         |       4894131 | ahju             |  59874 |
+|          9 | ik   | city i       | 9 nagar         |       4858821 | ahtre            |  59698 |
+|         10 | jk   | city j       | 10 nagar        |       4894781 | atsdfu           | 585264 |
++------------+------+--------------+-----------------+---------------+------------------+--------+
+10 rows in set (0.06 sec)
+
+mysql> select * from transactioninfo;
++---------------+-----------+-----------------+--------+-----------------+
+| transactionid | accountid | transactiontype | amount | transactiondate |
++---------------+-----------+-----------------+--------+-----------------+
+|           101 |       502 | credit          | 520000 | 2020-02-11      |
+|           102 |       505 | debit           |  36000 | 2020-02-14      |
+|           103 |       512 | credit          |  52580 | 2020-02-05      |
+|           104 |       516 | debit           | 589020 | 2020-02-01      |
+|           105 |       517 | credit          |  58970 | 2020-02-02      |
+|           106 |       518 | debit           |  56920 | 2020-02-08      |
+|           107 |       528 | credit          |  74850 | 2020-02-06      |
+|           108 |       568 | debit           |  98020 | 2020-02-08      |
+|           109 |       558 | debit           |  35050 | 2020-02-15      |
+|           110 |       588 | debit           |  89750 | 2020-02-19      |
++---------------+-----------+-----------------+--------+-----------------+
+10 rows in set (0.05 sec)
+
+mysql> select * from transactioninfo where transactiodate between 2020-02-01 and 2020-02-10;
+ERROR 1054 (42S22): Unknown column 'transactiodate' in 'where clause'
+mysql>   select * from transactioninfo where transactiondate between 2020-02-01 and 2020-02-10;
+Empty set, 2 warnings (0.05 sec)
+
+mysql>  select * from transactioninfo where transactiodate between 2020-02-01 and 2020-02-20;
+ERROR 1054 (42S22): Unknown column 'transactiodate' in 'where clause'
+mysql>  select * from transactioninfo where transactiondate between 2020-02-01 and 2020-02-20;
+Empty set, 2 warnings (0.00 sec)
+
+mysql> select transactionid,accountid from transactioninfo where transactiondate between 2020-02-01 and 2020-02-20;
+Empty set, 2 warnings (0.00 sec)
+
+mysql> select transactionid,accountid from transactioninfo where transactiondate between '2020-02-01' and '2020-02-20';
++---------------+-----------+
+| transactionid | accountid |
++---------------+-----------+
+|           101 |       502 |
+|           102 |       505 |
+|           103 |       512 |
+|           104 |       516 |
+|           105 |       517 |
+|           106 |       518 |
+|           107 |       528 |
+|           108 |       568 |
+|           109 |       558 |
+|           110 |       588 |
++---------------+-----------+
+10 rows in set (0.04 sec)
+
+mysql> select * from accountinfo where customerid=10;
++-----------+------------+-------------+----------------+-----------------+---------------+
+| accountid | customerid | accounttype | accountbalance | accountopendate | accountstatus |
++-----------+------------+-------------+----------------+-----------------+---------------+
+|       568 |         10 | savings     |         355680 | 2020-11-07      | open          |
++-----------+------------+-------------+----------------+-----------------+---------------+
+1 row in set (0.01 sec)
+
+mysql> select * from accountinfo,customersinfo where accountinfo.customerid=customersinfo.customerid;
++-----------+------------+-------------+----------------+-----------------+---------------+------------+------+--------------+-----------------+---------------+------------------+--------+
+| accountid | customerid | accounttype | accountbalance | accountopendate | accountstatus | customerid | name | customercity | customeraddress | customermobno | customerpassword | pan    |
++-----------+------------+-------------+----------------+-----------------+---------------+------------+------+--------------+-----------------+---------------+------------------+--------+
+|       502 |          5 | savings     |         150000 | 2020-11-07      | closed        |          5 | ek   | city e       | 5 nagar         |        458963 | tytf             |  89745 |
+|       505 |          6 | savings     |         550000 | 2020-11-08      | open          |          6 | fk   | city f       | 6 nagar         |        145895 | gjhfxc           | 898456 |
+|       512 |          1 | savings     |          56000 | 2020-11-05      | open          |          1 | ak   | city a       | 1 nagar         |         87954 | abc              |  56987 |
+|       516 |          2 | savings     |          56580 | 2020-11-06      | open          |          2 | bk   | city b       | 2 nagar         |         45912 | qwrer            |  58984 |
+|       517 |          3 | current     |          85805 | 2020-11-05      | open          |          3 | ck   | city c       | 3 nagar         |         78256 | gty              | 879456 |
+|       518 |          4 | savings     |         158950 | 2020-11-06      | open          |          4 | dk   | city d       | 4 nagar         |         12389 | ghry             | 589845 |
+|       528 |          9 | savings     |         380000 | 2020-11-06      | open          |          9 | ik   | city i       | 9 nagar         |       4858821 | ahtre            |  59698 |
+|       558 |          7 | savings     |          50000 | 2020-11-07      | blocked       |          7 | gk   | city g       | 7 nagar         |        879846 | ahjx             |  56845 |
+|       568 |         10 | savings     |         355680 | 2020-11-07      | open          |         10 | jk   | city j       | 10 nagar        |       4894781 | atsdfu           | 585264 |
+|       588 |          8 | savings     |         350000 | 2020-11-08      | open          |          8 | hk   | city h       | 8 nagar         |       4894131 | ahju             |  59874 |
++-----------+------------+-------------+----------------+-----------------+---------------+------------+------+--------------+-----------------+---------------+------------------+--------+
+10 rows in set (0.00 sec)
+
+mysql> select * from accountinfo rightjoin customersinfo on accountinfo.customerid=customersinfo.customerid;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'customersinfo on accountinfo.customerid=customersinfo.customerid' at line 1
+mysql> select * from customersinfo rightjoin on accountinfo.customerid=customersinfo.customerid;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'on accountinfo.customerid=customersinfo.customerid' at line 1
+mysql>  select * from accountinfo rightjoin customersinfo on accountinfo.customerid=customersinfo.customerid;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'customersinfo on accountinfo.customerid=customersinfo.customerid' at line 1
+mysql>   select * from accountinfo left join customersinfo on accountinfo.customerid=customersinfo.customerid;
++-----------+------------+-------------+----------------+-----------------+---------------+------------+------+--------------+-----------------+---------------+------------------+--------+
+| accountid | customerid | accounttype | accountbalance | accountopendate | accountstatus | customerid | name | customercity | customeraddress | customermobno | customerpassword | pan    |
++-----------+------------+-------------+----------------+-----------------+---------------+------------+------+--------------+-----------------+---------------+------------------+--------+
+|       502 |          5 | savings     |         150000 | 2020-11-07      | closed        |          5 | ek   | city e       | 5 nagar         |        458963 | tytf             |  89745 |
+|       505 |          6 | savings     |         550000 | 2020-11-08      | open          |          6 | fk   | city f       | 6 nagar         |        145895 | gjhfxc           | 898456 |
+|       512 |          1 | savings     |          56000 | 2020-11-05      | open          |          1 | ak   | city a       | 1 nagar         |         87954 | abc              |  56987 |
+|       516 |          2 | savings     |          56580 | 2020-11-06      | open          |          2 | bk   | city b       | 2 nagar         |         45912 | qwrer            |  58984 |
+|       517 |          3 | current     |          85805 | 2020-11-05      | open          |          3 | ck   | city c       | 3 nagar         |         78256 | gty              | 879456 |
+|       518 |          4 | savings     |         158950 | 2020-11-06      | open          |          4 | dk   | city d       | 4 nagar         |         12389 | ghry             | 589845 |
+|       528 |          9 | savings     |         380000 | 2020-11-06      | open          |          9 | ik   | city i       | 9 nagar         |       4858821 | ahtre            |  59698 |
+|       558 |          7 | savings     |          50000 | 2020-11-07      | blocked       |          7 | gk   | city g       | 7 nagar         |        879846 | ahjx             |  56845 |
+|       568 |         10 | savings     |         355680 | 2020-11-07      | open          |         10 | jk   | city j       | 10 nagar        |       4894781 | atsdfu           | 585264 |
+|       588 |          8 | savings     |         350000 | 2020-11-08      | open          |          8 | hk   | city h       | 8 nagar         |       4894131 | ahju             |  59874 |
++-----------+------------+-------------+----------------+-----------------+---------------+------------+------+--------------+-----------------+---------------+------------------+--------+
+10 rows in set (0.00 sec)
+
+mysql>  select accountid,accountbalance,transactionid,amount,transactiontype from accountinfo left join  transactioninfo on accountinf.customerid=transactioninfo.customerid;
+ERROR 1052 (23000): Column 'accountid' in field list is ambiguous
+mysql> select accountbalance,transactionid,amount,transactiontype from accountinfo left join transactioninfo on accountinf.customerid=transactioninfo.customerid;
+ERROR 1054 (42S22): Unknown column 'accountinf.customerid' in 'on clause'
+mysql> select accountbalance,transactionid,amount,transactiontype from accountinfo left join transactioninfo on accountinfo.customerid=transactioninfo.customerid;
+ERROR 1054 (42S22): Unknown column 'transactioninfo.customerid' in 'on clause'
+mysql>  select accountbalance,transactionid,amount,transactiontype from accountinfo left join transactioninfo on accountinfo.accountid=transactioninfo.account.id;
+ERROR 1054 (42S22): Unknown column 'transactioninfo.account.id' in 'on clause'
+mysql>  select accountbalance,transactionid,amount,transactiontype from accountinfo left join transactioninfo on accountinfo.accountid=transactioninfo.accountid;
++----------------+---------------+--------+-----------------+
+| accountbalance | transactionid | amount | transactiontype |
++----------------+---------------+--------+-----------------+
+|         150000 |           101 | 520000 | credit          |
+|         550000 |           102 |  36000 | debit           |
+|          56000 |           103 |  52580 | credit          |
+|          56580 |           104 | 589020 | debit           |
+|          85805 |           105 |  58970 | credit          |
+|         158950 |           106 |  56920 | debit           |
+|         380000 |           107 |  74850 | credit          |
+|          50000 |           109 |  35050 | debit           |
+|         355680 |           108 |  98020 | debit           |
+|         350000 |           110 |  89750 | debit           |
++----------------+---------------+--------+-----------------+
+10 rows in set (0.04 sec)
+
+mysql>
